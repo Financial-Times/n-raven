@@ -2,6 +2,12 @@
 
 Some middleware for Express and Node that sets up Raven (or not as appropriate) depending on sensible environment variables.
 
+## Installation
+
+```sh
+npm install --save express-errors-handler
+```
+
 ## Usage
 
 ```js
