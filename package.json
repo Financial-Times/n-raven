@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "main": "main.js",
+  "dependencies": {
+    "raven": "^0.7.2"
+  }
+}
