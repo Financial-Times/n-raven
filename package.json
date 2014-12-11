@@ -1,9 +1,10 @@
 {
+  "name": "express-error-handler"
   "version": "1.0.0",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ftlabs/ftdomdelegate.git"
+    "url": "git://github.com/Financial-Times/express-error-handler.git"
   },
   "license": "MIT",
   "dependencies": {
