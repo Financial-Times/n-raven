@@ -1,4 +1,4 @@
-# express-error-handler
+# express-errors-handler
 
 Some middleware for Express and Node that sets up Raven (or not as appropriate) depending on sensible environment variables.
 
@@ -7,7 +7,7 @@ Some middleware for Express and Node that sets up Raven (or not as appropriate) 
 ```js
 var express = require('express');
 var app = express();
-var errorMiddleware = require('express-error-handler').middleware;
+var errorMiddleware = require('express-errors-handler').middleware;
 
 var promiseEnabledApi = require('./my-promise-enabled-api');
 

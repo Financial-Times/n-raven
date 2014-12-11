@@ -1,10 +1,10 @@
 {
-  "name": "express-error-handler",
+  "name": "express-errors-handler",
   "version": "1.0.0",
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Financial-Times/express-error-handler.git"
+    "url": "git://github.com/Financial-Times/express-errors-handler.git"
   },
   "license": "MIT",
   "dependencies": {
