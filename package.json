@@ -1,6 +1,11 @@
 {
   "version": "1.0.0",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ftlabs/ftdomdelegate.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "raven": "^0.7.2"
   }

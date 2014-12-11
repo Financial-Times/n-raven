@@ -30,3 +30,7 @@ app.use(errorMiddleware);
 ## Supported environment variables
 - `NODE_ENV` - mode to operate in, can be either `PRODUCTION` (sends bugs to aggregator) or any another value (shows bugs to user)
 - `RAVEN_URL` - URL to report bugs captured in production
+
+# License
+
+This software is published by the Financial Times under the [MIT license](http://opensource.org/licenses/MIT).
