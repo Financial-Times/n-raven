@@ -25,6 +25,7 @@ app.get('/a-typical-route', function(req, res, next) {
 
 // Make sure the middleware is added after your routes otherwise 
 app.use(errorMiddleware);
+```
 
 ## Supported environment variables
 - `NODE_ENV` - mode to operate in either `PRODUCTION`
