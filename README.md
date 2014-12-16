@@ -29,7 +29,7 @@ app.get('/a-typical-route', function(req, res, next) {
 		.catch(next);
 });
 
-// Make sure the middleware is added after your routes otherwise 
+// Make sure the middleware is added after your routes otherwise you'll lose the errors
 app.use(errorMiddleware);
 ```
 
