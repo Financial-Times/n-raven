@@ -18,6 +18,7 @@ if (process.env.NODE_ENV === 'production') {
 		},
 		middleware: function(err, req, res, next) {
 			console.log("Uncaught Error", err);
+			console.log(err.stack);
 			res.status(500).send({ type: "Uncaught Error", error: err });
 			process.exit(1);
 		}
