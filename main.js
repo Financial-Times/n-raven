@@ -16,6 +16,9 @@ if (process.env.NODE_ENV === 'production') {
 		captureMessage: function () {
 			console.log.apply(console, arguments);
 		},
+		captureError: function () {
+			console.log.apply(console, arguments);
+		},
 		middleware: function(err, req, res, next) {
 			console.log("Uncaught Error", err);
 			console.log(err.stack);
