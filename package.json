@@ -1,6 +1,6 @@
 {
   "name": "express-errors-handler",
-  "version": "1.2.1",
+  "version": "0.0.0",
   "main": "main.js",
   "repository": {
     "type": "git",
@@ -9,5 +9,9 @@
   "license": "MIT",
   "dependencies": {
     "raven": "^0.7.2"
+  },
+  "devDependencies": {
+    "npm-prepublish": "^1.2.0",
+    "origami-build-tools": "^2.13.0"
   }
 }
