@@ -1,0 +1,16 @@
+sudo: false
+language: node_js
+script: npm test
+node_js:
+- '0.10'
+before_deploy:
+- npm-prepublish --verbose
+deploy:
+  provider: npm
+  email: matt@mattandre.ws
+  api_key:
+    secure: TerEbCgSFol6dOUt3gELkQLMrLr8nbLUlNNu/XZnsb2Xc1RYsrbr94YdlKZksslYX7StCkv4H1BVWyzepnx7/KEcJfwAjkY8aYKbblT7EhTStDAjg388m7QSnJF4rZZoGGDvTdxQsaWutYIRDB9dytHYggEoKerI3xgXIlSKAQg=
+  on:
+    all_branches: true
+    tags: true
+    repo: Financial-Times/express-errors-handler
