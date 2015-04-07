@@ -8,6 +8,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "ft-next-logger": "^1.0.0",
     "raven": "^0.7.2"
   },
   "devDependencies": {
