@@ -17,14 +17,13 @@ if (process.env.NODE_ENV === 'production') {
 } else {
 	module.exports = {
 		captureMessage: function () {
-			logger.error.apply(logger, arguments);
+			logger.warn.apply(logger, arguments);
 		},
 		captureError: function () {
-			logger.error.apply(logger, arguments);
+			logger.warn.apply(logger, arguments);
 		},
 		middleware: function(err, req, res, next) {
-			logger.error("Uncaught Error", err);
-			logger.error(err.stack);
+			logger.error("Uncaught Error -", err);
 			res.status(500).send({ type: "Uncaught Error", error: err });
 			process.exit(1);
 		}
