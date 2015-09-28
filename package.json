@@ -8,11 +8,10 @@
   },
   "license": "MIT",
   "dependencies": {
-    "ft-next-logger": "^1.0.0",
-    "raven": "^0.7.2"
+    "ft-next-logger": "^2.2.1",
+    "raven": "^0.8.1"
   },
   "devDependencies": {
-    "npm-prepublish": "^1.2.0",
-    "origami-build-tools": "^2.13.0"
+    "next-build-tools": "^4.1.2"
   }
 }
