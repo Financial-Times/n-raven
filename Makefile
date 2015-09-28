@@ -2,4 +2,4 @@ install:
 	npm install
 
 test:
-	origami-build-tools verify
+	nbt verify --skip-layout-checks

@@ -1,11 +1,10 @@
-/*jshint node:true*/
 'use strict';
 
-var logger = require('ft-next-logger');
+const logger = require('ft-next-logger');
 
 if (process.env.NODE_ENV === 'production') {
-	var raven = require('raven');
-	var client = new raven.Client(process.env.RAVEN_URL);
+	const raven = require('raven');
+	const client = new raven.Client(process.env.RAVEN_URL);
 	module.exports = client;
 	module.exports.middleware = raven.middleware.express(client);
 
@@ -22,9 +21,9 @@ if (process.env.NODE_ENV === 'production') {
 		captureError: function () {
 			logger.warn.apply(logger, arguments);
 		},
-		middleware: function(err, req, res, next) {
-			logger.error("Uncaught Error -", err);
-			res.status(500).send({ type: "Uncaught Error", error: err });
+		middleware: function(err, req, res) {
+			logger.error('Uncaught Error -', err);
+			res.status(500).send({ type: 'Uncaught Error', error: err });
 			process.exit(1);
 		}
 	};
