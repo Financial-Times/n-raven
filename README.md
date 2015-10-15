@@ -13,7 +13,8 @@ npm install --save express-errors-handler
 ```js
 var express = require('express');
 var app = express();
-var errorMiddleware = require('express-errors-handler').middleware;
+var eeh = require('express-errors-handler')
+var errorMiddleware = eeh.middleware;
 
 var promiseEnabledApi = require('./my-promise-enabled-api');
 
@@ -29,6 +30,21 @@ app.get('/a-typical-route', function(req, res, next) {
 		.catch(next);
 });
 
+// A typical route with an upstream dependency
+app.get('/a-typical-route', function(req, res, next) {
+	fetch('http://a.url.i-like')
+		.then(function(someThings) {
+			res.render(someThings);
+		})
+		// chosse what status to send when an upstream service errors
+		.catch(eeh.upstreamErrorHandler(404))
+
+		// Make sure to end all Promise chains with a `catch`
+		// that passes the error to the next middleware
+		.catch(next);
+});
+
+
 // Make sure the middleware is added after your routes otherwise you'll lose the errors
 app.use(errorMiddleware);
 ```
@@ -36,6 +52,7 @@ app.use(errorMiddleware);
 ## Supported environment variables
 - `NODE_ENV` - mode to operate in, can be either `PRODUCTION` (sends bugs to aggregator) or any another value (shows bugs to user)
 - `RAVEN_URL` - URL to report bugs captured in production
+- `SPLUNK_URL` - URL to send non critical or upstream bugs too
 
 # License
 
