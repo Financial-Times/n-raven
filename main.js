@@ -1,6 +1,6 @@
 'use strict';
 
-const logger = require('ft-next-logger');
+const logger = require('ft-next-logger').logger;
 const fetchres = require('fetchres');
 const raven = require('raven');
 let ravenMiddleware;
@@ -53,12 +53,8 @@ if (process.env.NODE_ENV === 'production') {
 } else {
 
 	module.exports = {
-		captureMessage: function () {
-			logger.warn.apply(logger, arguments);
-		},
-		captureError: function () {
-			logger.warn.apply(logger, arguments);
-		},
+		captureMessage: logger.warn.bind(logger),
+		captureError: logger.error.bind(logger),
 		middleware: sendErrorDev,
 		upstreamErrorHandler: getUpstreamErrorHandler(sendErrorDev)
 	};
