@@ -5,7 +5,7 @@ const fetchres = require('fetchres');
 const raven = require('raven');
 let ravenMiddleware;
 
-function sendErrorDev (err, req, res) {
+function sendErrorDev (err, req, res, next) {
 	if (err.name === fetchres.ReadTimeoutError.name) {
 		logger.error('event=dependencytimeout', err);
 		res && res.status(504).send({ type: 'Bad Gateway', error: err });
@@ -16,12 +16,12 @@ function sendErrorDev (err, req, res) {
 	}
 }
 
-function sendErrorProd (err, req, res) {
+function sendErrorProd (err, req, res, next) {
 	if (err.name === fetchres.ReadTimeoutError.name) {
 		logger.error('event=dependencytimeout', err);
 		res && res.status(504).send({ type: 'Bad Gateway', error: err });
 	} else {
-		return ravenMiddleware(err, req, res);
+		return ravenMiddleware(err, req, res, next);
 	}
 }
 
