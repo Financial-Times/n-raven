@@ -7,10 +7,10 @@ let ravenMiddleware;
 
 function sendErrorDev (err, req, res) {
 	if (err.name === fetchres.ReadTimeoutError.name) {
-		logger.error('Dependency timeout -', err);
+		logger.error('event=dependencytimeout', err);
 		res && res.status(504).send({ type: 'Bad Gateway', error: err });
 	} else {
-		logger.error('Uncaught Error -', err);
+		logger.error('event=uncaughterror', err);
 		res && res.status(500).send({ type: 'Uncaught Error', error: err });
 		process.exit(1);
 	}
@@ -18,7 +18,7 @@ function sendErrorDev (err, req, res) {
 
 function sendErrorProd (err, req, res) {
 	if (err.name === fetchres.ReadTimeoutError.name) {
-		logger.error('Dependency timeout -', err);
+		logger.error('event=dependencytimeout', err);
 		res && res.status(504).send({ type: 'Bad Gateway', error: err });
 	} else {
 		return ravenMiddleware(err, req, res);
