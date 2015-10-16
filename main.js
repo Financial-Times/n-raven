@@ -12,7 +12,6 @@ function sendErrorDev (err, req, res, next) {
 	} else {
 		logger.error('event=uncaughterror', err);
 		res && res.status(500).send({ type: 'Uncaught Error', error: err });
-		process.exit(1);
 	}
 }
 
@@ -26,13 +25,14 @@ function sendErrorProd (err, req, res, next) {
 }
 
 function getUpstreamErrorHandler (errorReporter) {
-	return function(res, statusCode) {
+	return function(req, res, next, statusCode) {
 		return function(err) {
+
 			if (err.name === fetchres.BadServerResponseError.name) {
 				errorReporter(err);
 				res.status(statusCode).end();
 			} else {
-				errorReporter(err, null, res);
+				errorReporter(err, req, res, next);
 			}
 		};
 	}
