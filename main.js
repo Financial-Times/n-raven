@@ -1,3 +1,4 @@
+/*eslint no-unused-vars:0*/
 'use strict';
 
 const logger = require('ft-next-logger').logger;
@@ -19,23 +20,25 @@ function sendErrorProd (err, req, res, next) {
 	if (err.name === fetchres.ReadTimeoutError.name) {
 		logger.error('event=dependencytimeout', err);
 		res && res.status(504).send({ type: 'Bad Gateway', error: err });
-	} else {
+	} else if (req && res && next) {
 		return ravenMiddleware(err, req, res, next);
+	} else {
+		logger.error('event=uncaughterror', err);
 	}
 }
 
 function getUpstreamErrorHandler (errorReporter) {
-	return function(req, res, next, statusCode) {
+	return function(res, next, statusCode) {
 		return function(err) {
 
 			if (err.name === fetchres.BadServerResponseError.name) {
 				errorReporter(err);
 				res.status(statusCode).end();
 			} else {
-				errorReporter(err, req, res, next);
+				next(err);
 			}
 		};
-	}
+	};
 }
 
 if (process.env.NODE_ENV === 'production') {

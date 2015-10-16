@@ -16,9 +16,6 @@ describe('express errors handler in dev', function () {
 	const error = new Error('potato');
 	before(function () {
 		app = express();
-		app.get('/uncaught-error', function (req, res, next) {
-			throw new Error('tomato');
-		});
 
 		app.get('/caught-error', function (req, res, next) {
 			next(error);
