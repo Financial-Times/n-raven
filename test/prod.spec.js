@@ -18,12 +18,14 @@ describe('express errors handler in prod', function () {
 		next(err, req, res);
 	});
 	const captureErrorSpy = sinon.spy();
+	const captureMessageSpy = sinon.spy();
 
 	before(function () {
 		sinon.stub(raven.middleware, 'express', () => ravenSpy);
 		sinon.stub(raven, 'Client', () => {
 			return {
 				captureError: captureErrorSpy,
+				captureMessage: captureMessageSpy,
 				patchGlobal: sinon.spy()
 			}
 		});
@@ -108,5 +110,13 @@ describe('express errors handler in prod', function () {
 		expect(captureErrorSpy.called).to.be.true;
 		expect(captureErrorSpy.args[0].length).to.equal(1);
 		expect(captureErrorSpy.args[0][0].name).to.equal(badServerError.name);
+	});
+
+	it('can capture messages outside of express controllers', function () {
+		errorsHandler.captureMessage('random message');
+
+		expect(captureMessageSpy.called).to.be.true;
+		expect(captureMessageSpy.args[0].length).to.equal(1);
+		expect(captureMessageSpy.args[0][0]).to.equal('random message');
 	});
 });
