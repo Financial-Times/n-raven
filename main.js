@@ -20,10 +20,11 @@ function sendErrorProd (err, req, res, next) {
 	if (err.name === fetchres.ReadTimeoutError.name) {
 		logger.error('event=dependencytimeout', err);
 		res && res.status(504).send({ type: 'Bad Gateway', error: err });
-	} else if (req && res && next) {
-		return ravenMiddleware(err, req, res, next);
 	} else {
 		logger.error('event=uncaughterror', err);
+		if (req && res && next) {
+			return ravenMiddleware(err, req, res, next);
+		}
 	}
 }
 
