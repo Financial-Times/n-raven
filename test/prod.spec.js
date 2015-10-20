@@ -61,7 +61,8 @@ describe('express errors handler in prod', function () {
 			.get('/caught-error')
 			.end((err, res) => {
 				expect(res.status).to.equal(500);
-				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.false;
+				expect(logger.error.callCount).to.equal(1);
+				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.true;
 				expect(ravenSpy.called).to.be.true;
 				expect(ravenSpy.args[0].length).to.equal(4);
 				done();
@@ -97,7 +98,7 @@ describe('express errors handler in prod', function () {
 				expect(res.status).to.equal(500);
 				expect(ravenSpy.called).to.be.true;
 				expect(ravenSpy.args[0].length).to.equal(4);
-				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.false;
+				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.true;
 				done();
 			});
 	});
