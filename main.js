@@ -41,9 +41,20 @@ function getUpstreamErrorHandler (errorReporter) {
 	};
 }
 
+function getCaptureError (client) {
+	return function(err) {
+		if (err.name === fetchres.ReadTimeoutError.name) {
+			logger.error('event=dependencytimeout', err);
+		} else {
+			client.captureError.apply(client, arguments);
+		}
+	};
+}
+
 if (process.env.NODE_ENV === 'production') {
 	const client = new raven.Client(process.env.RAVEN_URL);
-	module.exports = client;
+	module.exports = Object.assign({}, client);
+	module.exports.captureError = getCaptureError(client);
 	module.exports.middleware = sendErrorProd;
 	module.exports.upstreamErrorHandler = getUpstreamErrorHandler(sendErrorProd);
 	ravenMiddleware = raven.middleware.express(client);

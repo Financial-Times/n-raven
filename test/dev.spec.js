@@ -44,7 +44,7 @@ describe('express errors handler in dev', function () {
 			.get('/caught-error')
 			.end((err, res) => {
 				expect(res.status).to.equal(500);
-				expect(logger.error.calledWith('event=uncaughterror', error))
+				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.true;
 				done();
 			});
 	});
@@ -54,7 +54,7 @@ describe('express errors handler in dev', function () {
 			.get('/timeout')
 			.end((err, res) => {
 				expect(res.status).to.equal(504);
-				expect(logger.error.calledWith('event=dependencytimeout', readTimeoutError))
+				expect(logger.error.calledWith('event=dependencytimeout', readTimeoutError)).to.be.true;
 				done();
 			});
 	});
@@ -64,7 +64,7 @@ describe('express errors handler in dev', function () {
 			.get('/bad-response')
 			.end((err, res) => {
 				expect(res.status).to.equal(513);
-				expect(logger.error.calledWith('event=uncaughterror', badServerError))
+				expect(logger.error.calledWith('event=uncaughterror', badServerError)).to.be.true;
 				done();
 			});
 	});
@@ -74,7 +74,7 @@ describe('express errors handler in dev', function () {
 			.get('/not-bad-response')
 			.end((err, res) => {
 				expect(res.status).to.equal(500);
-				expect(logger.error.calledWith('event=uncaughterror', error))
+				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.true;
 				done();
 			});
 	});
