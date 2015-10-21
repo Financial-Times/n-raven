@@ -22,13 +22,13 @@ describe('express errors handler in prod', function () {
 
 	before(function () {
 		sinon.stub(raven.middleware, 'express', () => ravenSpy);
-		sinon.stub(raven, 'Client', () => {
-			return {
-				captureError: captureErrorSpy,
-				captureMessage: captureMessageSpy,
-				patchGlobal: sinon.spy()
-			}
-		});
+
+		const clientStub = function() {};
+		clientStub.prototype.captureMessage = captureMessageSpy;
+		clientStub.prototype.captureError = captureErrorSpy;
+		clientStub.prototype.patchGlobal = sinon.spy();
+
+		sinon.stub(raven, 'Client', clientStub);
 		errorsHandler = require('../main');
 		app = express();
 
@@ -50,11 +50,12 @@ describe('express errors handler in prod', function () {
 		app.use(errorsHandler.middleware);
 	});
 
+
 	beforeEach(() => sinon.stub(logger, 'error'));
 	afterEach(() => {
 		logger.error.restore();
 		ravenSpy.reset();
-	})
+	});
 
 	it('handle an arbitrary error', function (done) {
 		request(app)
