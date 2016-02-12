@@ -4,7 +4,7 @@ const request = require('supertest');
 const express = require('express');
 const fetchres = require('fetchres');
 
-const logger = require('ft-next-logger').logger;
+const logger = require('@financial-times/n-logger').default;
 const sinon = require('sinon');
 const raven = require('raven');
 
