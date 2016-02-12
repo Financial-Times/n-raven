@@ -1,7 +1,7 @@
 /*eslint no-unused-vars:0*/
 'use strict';
 
-const logger = require('ft-next-logger').logger;
+const logger = require('@financial-times/n-logger').default;
 const fetchres = require('fetchres');
 const raven = require('raven');
 let ravenMiddleware;

@@ -5,7 +5,7 @@ const request = require('supertest');
 const express = require('express');
 const fetchres = require('fetchres');
 const errorsHandler = require('../main');
-const logger = require('ft-next-logger').logger;
+const logger = require('@financial-times/n-logger').default;
 const sinon = require('sinon');
 
 describe('express errors handler in dev', function () {
