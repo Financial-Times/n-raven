@@ -1,4 +1,4 @@
-# express-errors-handler
+# express-errors-handler [![Circle CI](https://circleci.com/gh/Financial-Times/express-errors-handler.svg?style=svg)](https://circleci.com/gh/Financial-Times/express-errors-handler)
 
 Some middleware for Express and Node that sets up Raven (or not as appropriate) depending on sensible environment variables.
 
