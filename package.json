@@ -1,6 +1,6 @@
 {
   "name": "express-errors-handler",
-  "version": "1.4.7",
+  "version": "1.4.8",
   "main": "main.js",
   "repository": {
     "type": "git",
