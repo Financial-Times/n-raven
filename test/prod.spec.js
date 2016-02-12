@@ -63,7 +63,7 @@ describe('express errors handler in prod', function () {
 			.end((err, res) => {
 				expect(res.status).to.equal(500);
 				expect(logger.error.callCount).to.equal(1);
-				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.true;
+				expect(logger.error.calledWith(error, { event: 'uncaughterror'})).to.be.true;
 				expect(ravenSpy.called).to.be.true;
 				expect(ravenSpy.args[0].length).to.equal(4);
 				done();
@@ -76,7 +76,7 @@ describe('express errors handler in prod', function () {
 			.end((err, res) => {
 				expect(res.status).to.equal(504);
 				expect(ravenSpy.called).to.be.false;
-				expect(logger.error.calledWith('event=dependencytimeout', readTimeoutError)).to.be.true;
+				expect(logger.error.calledWith(readTimeoutError, { event: 'dependencytimeout'})).to.be.true;
 				done();
 			});
 	});
@@ -87,7 +87,7 @@ describe('express errors handler in prod', function () {
 			.end((err, res) => {
 				expect(res.status).to.equal(513);
 				expect(ravenSpy.called).to.be.false;
-				expect(logger.error.calledWith('event=uncaughterror', badServerError)).to.be.true;
+				expect(logger.error.calledWith(badServerError, { event: 'uncaughterror'})).to.be.true;
 				done();
 			});
 	});
@@ -99,14 +99,14 @@ describe('express errors handler in prod', function () {
 				expect(res.status).to.equal(500);
 				expect(ravenSpy.called).to.be.true;
 				expect(ravenSpy.args[0].length).to.equal(4);
-				expect(logger.error.calledWith('event=uncaughterror', error)).to.be.true;
+				expect(logger.error.calledWith(error, { event: 'uncaughterror'})).to.be.true;
 				done();
 			});
 	});
 
 	it('can capture errors outside of express controllers', function () {
 		errorsHandler.captureError(readTimeoutError);
-		expect(logger.error.calledWith('event=dependencytimeout', readTimeoutError)).to.be.true;
+		expect(logger.error.calledWith(readTimeoutError, { event: 'dependencytimeout'})).to.be.true;
 
 		errorsHandler.captureError(badServerError);
 		expect(captureErrorSpy.called).to.be.true;
