@@ -37,45 +37,59 @@ describe('express errors handler in dev', function () {
 	});
 
 	beforeEach(() => sinon.stub(logger, 'error'));
-	afterEach(() => logger.error.restore())
+	afterEach(() => logger.error.restore());
 
-	it('handle an arbitrary error', function (done) {
-		request(app)
+	it('handle an arbitrary error', () => {
+		return request(app)
 			.get('/caught-error')
-			.end((err, res) => {
-				expect(res.status).to.equal(500);
+			.expect(500)
+			.expect(res => {
+				const body = res.body;
+				expect(body).to.have.property('type', 'Uncaught Error');
+				expect(body).to.contain.keys('error');
+				expect(body.error).to.have.property('name', 'Error');
+				expect(body.error).to.have.property('message', 'potato');
+				expect(body.error).to.contain.keys('stack');
+				expect(body.error.stack[0]).to.equal('Error: potato');
 				expect(logger.error.calledWith(error, { event: 'uncaughterror' })).to.be.true;
-				done();
 			});
 	});
 
-	it('handle backend timeout', function (done) {
-		request(app)
+	it('handle backend timeout', () => {
+		return request(app)
 			.get('/timeout')
-			.end((err, res) => {
-				expect(res.status).to.equal(504);
+			.expect(504)
+			.expect(res => {
+				const body = res.body;
+				expect(body).to.have.property('type', 'Bad Gateway');
+				expect(body).to.contain.keys('error');
+				expect(body.error).to.have.property('name', 'ReadTimeoutError');
 				expect(logger.error.calledWith(readTimeoutError, { event: 'dependencytimeout' })).to.be.true;
-				done();
 			});
 	});
 
-	it('handle backend error with custom response', function (done) {
-		request(app)
+	it('handle backend error with custom response', () => {
+		return request(app)
 			.get('/bad-response')
-			.end((err, res) => {
-				expect(res.status).to.equal(513);
+			.expect(513)
+			.expect(() => {
 				expect(logger.error.calledWith(badServerError, { event: 'uncaughterror' })).to.be.true;
-				done();
 			});
 	});
 
-	it('handle non-matching error with default response', function (done) {
-		request(app)
+	it('handle non-matching error with default response', () => {
+		return request(app)
 			.get('/not-bad-response')
-			.end((err, res) => {
-				expect(res.status).to.equal(500);
+			.expect(500)
+			.expect(res => {
+				const body = res.body;
+				expect(body).to.have.property('type', 'Uncaught Error');
+				expect(body).to.contain.keys('error');
+				expect(body.error).to.have.property('name', 'TypeError');
+				expect(body.error).to.have.property('message', 'next is not a function');
+				expect(body.error).to.contain.keys('stack');
+				expect(body.error.stack[0]).to.equal('TypeError: next is not a function');
 				expect(logger.error.calledWith(error, { event: 'uncaughterror' })).to.be.true;
-				done();
 			});
 	});
 
