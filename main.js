@@ -7,13 +7,18 @@ const raven = require('raven');
 let ravenMiddleware;
 
 function sendErrorDev (err, req, res, next) {
-	const error = (err instanceof Error) ?
-		{
+	let error;
+	if (err instanceof Error) {
+		error = {
 			name: err.name,
-			message: err.message,
-			stack: err.stack.split('\n')
-		} :
-		err;
+			message: err.message
+		};
+		if (err.stack) {
+			error.stack = err.stack.split('\n')
+		}
+	} else {
+		error = err;
+	}
 	if (err.name === fetchres.ReadTimeoutError.name) {
 		logger.error(err, { event: 'dependencytimeout' });
 		res && res.status(504).send({ type: 'Bad Gateway', error: error });
