@@ -4,6 +4,7 @@
 const logger = require('@financial-times/n-logger').default;
 const fetchres = require('fetchres');
 const raven = require('raven');
+const path = require('path');
 let ravenMiddleware;
 
 function sendErrorDev (err, req, res, next) {
@@ -65,12 +66,29 @@ function getCaptureError (client, _captureError) {
 }
 
 if (process.env.NODE_ENV === 'production') {
-	const client = new raven.Client(process.env.RAVEN_URL);
+
+	let about;
+
+	try {
+		about = require(path.join(process.cwd(), 'public/about.json'));
+	} catch (e) {
+		about = {};
+	}
+
+	const client = new raven.Client(process.env.RAVEN_URL, {
+		release: about.appVersion || 'unknown',
+		serverName: about.description || 'unknown',
+		tags: {
+			buildTime: about.buildCompletionTime || 'unknown'
+		}
+	});
+
 	const _captureError = client.captureError;
 	module.exports = client;
 	module.exports.captureError = getCaptureError(client, _captureError);
 	module.exports.middleware = sendErrorProd;
 	module.exports.upstreamErrorHandler = getUpstreamErrorHandler(sendErrorProd);
+
 	ravenMiddleware = raven.middleware.express(client);
 
 	// Die on uncaughtException
@@ -78,6 +96,7 @@ if (process.env.NODE_ENV === 'production') {
 	client.patchGlobal(function() {
 		process.exit(1);
 	});
+
 } else {
 
 	module.exports = {

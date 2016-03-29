@@ -1,5 +1,5 @@
 {
-  "name": "express-errors-handler",
+  "name": "@financial-times/n-raven",
   "version": "1.4.10",
   "main": "main.js",
   "repository": {
