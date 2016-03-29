@@ -4,7 +4,7 @@
 const logger = require('@financial-times/n-logger').default;
 const fetchres = require('fetchres');
 const raven = require('raven');
-const path = requre('path');
+const path = require('path');
 let ravenMiddleware;
 
 function sendErrorDev (err, req, res, next) {
@@ -71,15 +71,15 @@ if (process.env.NODE_ENV === 'production') {
 
 	try {
 		about = require(path.join(process.cwd(), 'public/about.json'));
-	} catch {
+	} catch (e) {
 		about = {};
 	}
 
 	const client = new raven.Client(process.env.RAVEN_URL, {
-		release: about.appVersion,
-		serverName: about.description,
+		release: about.appVersion || 'unknown',
+		serverName: about.description || 'unknown',
 		tags: {
-			buildTime: about.buildCompletionTime
+			buildTime: about.buildCompletionTime || 'unknown'
 		}
 	});
 
