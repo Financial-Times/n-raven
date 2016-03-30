@@ -70,7 +70,7 @@ if (process.env.NODE_ENV === 'production') {
 	let about;
 
 	try {
-		about = require(path.join(process.cwd(), 'public/about.json'));
+		about = require(path.join(process.cwd(), 'public/__about.json'));
 	} catch (e) {
 		about = {};
 	}
