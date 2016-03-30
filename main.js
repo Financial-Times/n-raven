@@ -77,7 +77,7 @@ if (process.env.NODE_ENV === 'production') {
 
 	const client = new raven.Client(process.env.RAVEN_URL, {
 		release: about.appVersion || 'unknown',
-		serverName: about.description || 'unknown',
+		name: about.description || 'unknown',
 		tags: {
 			buildTime: about.buildCompletionTime || 'unknown'
 		}
