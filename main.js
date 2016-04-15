@@ -106,3 +106,7 @@ if (process.env.NODE_ENV === 'production') {
 		upstreamErrorHandler: getUpstreamErrorHandler(sendErrorDev)
 	};
 }
+
+module.exports.utils = raven.utils;
+module.exports.transports = raven.transports;
+module.exports.parsers = raven.parsers;
