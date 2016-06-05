@@ -14,9 +14,10 @@
   },
   "devDependencies": {
     "chai": "^3.3.0",
+    "eslint": "^2.11.1",
     "express": "^4.13.3",
+    "lintspaces-cli": "^0.1.1",
     "mocha": "^2.3.3",
-    "next-build-tools": "^5.0.0",
     "sinon": "^1.17.1",
     "supertest": "^1.1.0"
   }
