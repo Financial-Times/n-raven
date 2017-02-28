@@ -42,8 +42,8 @@ function sendErrorProd (err, req, res, next) {
 }
 
 function getUpstreamErrorHandler (errorReporter) {
-	return function(res, next, statusCode) {
-		return function(err) {
+	return function (res, next, statusCode) {
+		return function (err) {
 
 			if (err.name === fetchres.BadServerResponseError.name) {
 				errorReporter(err);
@@ -56,7 +56,7 @@ function getUpstreamErrorHandler (errorReporter) {
 }
 
 function getCaptureError (client, _captureError) {
-	return function(err) {
+	return function (err) {
 		if (err.name === fetchres.ReadTimeoutError.name) {
 			logger.error(err, { event: 'dependencytimeout' });
 		} else {
@@ -93,7 +93,7 @@ if (process.env.NODE_ENV === 'production') {
 
 	// Die on uncaughtException
 	// https://github.com/getsentry/raven-node#catching-global-errors
-	client.patchGlobal(function() {
+	client.patchGlobal(function () {
 		process.exit(1);
 	});
 
