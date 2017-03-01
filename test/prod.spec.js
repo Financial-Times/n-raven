@@ -23,7 +23,7 @@ describe('express errors handler in prod', function () {
 	before(function () {
 		sinon.stub(raven.middleware, 'express', () => ravenSpy);
 
-		const clientStub = function() {};
+		const clientStub = function () {};
 		clientStub.prototype.captureMessage = captureMessageSpy;
 		clientStub.prototype.captureError = captureErrorSpy;
 		clientStub.prototype.patchGlobal = sinon.spy();
