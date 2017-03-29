@@ -36,6 +36,7 @@ function sendErrorProd (err, req, res, next) {
 	} else {
 		logger.error(err, { event: 'uncaughterror' });
 		if (req && res && next) {
+			err = sanitiseError(err)
 			return ravenMiddleware(err, req, res, next);
 		}
 	}
@@ -63,6 +64,44 @@ function getCaptureError (client, _captureError) {
 			_captureError.apply(client, arguments);
 		}
 	};
+}
+
+function sanitiseError (err) {
+	//Initially check for a specific email field e.g. in a url in an attempt to not blitz helpful error information if possible
+	if (err.message) {
+		const origErrorMsg = err.message
+		const emailFieldRegex = 'email='
+		const indxEmailField = origErrorMsg.search(emailFieldRegex)
+
+		let cleanedErr = origErrorMsg
+		if (indxEmailField > 0) {
+
+			cleanedErr = origErrorMsg.slice(0,indxEmailField) + 'email=-redacted-'
+
+			//in case there are more fields / is further at the end of the string
+			let indexOfAdditionalParams = origErrorMsg.indexOf('&', indxEmailField)
+			let indexOfPostURLspace = origErrorMsg.indexOf(' ', indxEmailField)
+
+			if(indexOfAdditionalParams > 0) {
+				cleanedErr = cleanedErr + origErrorMsg.slice(indexOfAdditionalParams, err.length)
+			}
+			else if (indexOfPostURLspace > 0){
+				cleanedErr = cleanedErr + origErrorMsg.slice(indexOfPostURLspace, err.length)
+			}
+
+		}
+
+		//The catch all check in case there are any remaining email addresses in the error
+		const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+
+		if (cleanedErr) {
+			cleanedErr = cleanedErr.replace(emailRegex, '-redacted-')
+		}
+		return cleanedErr
+	}
+	else {
+		return err
+	}
 }
 
 if (process.env.NODE_ENV === 'production') {
