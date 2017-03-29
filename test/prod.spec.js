@@ -13,7 +13,7 @@ describe('express errors handler in prod', function () {
 	let errorsHandler;
 	const readTimeoutError = new fetchres.ReadTimeoutError();
 	const badServerError = new fetchres.BadServerResponseError(418);
-	let errorToPassThrough = new Error('potato');
+	const errorToPassThrough = new Error('potato');
 	const ravenSpy = sinon.spy(function (err, req, res, next) {
 		next(err, req, res);
 	});
