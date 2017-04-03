@@ -13,7 +13,7 @@ describe('express errors handler in prod', function () {
 	let errorsHandler;
 	const readTimeoutError = new fetchres.ReadTimeoutError();
 	const badServerError = new fetchres.BadServerResponseError(418);
-	const error = new Error('potato');
+	const errorToPassThrough = new Error('potato');
 	const ravenSpy = sinon.spy(function (err, req, res, next) {
 		next(err, req, res);
 	});
@@ -33,7 +33,7 @@ describe('express errors handler in prod', function () {
 		app = express();
 
 		app.get('/caught-error', function (req, res, next) {
-			next(error);
+			next(errorToPassThrough);
 		});
 
 		app.get('/timeout', function (req, res, next) {
@@ -45,7 +45,7 @@ describe('express errors handler in prod', function () {
 		});
 
 		app.get('/not-bad-response', function (req, res, next) {
-			errorsHandler.upstreamErrorHandler(res, next, 513)(error);
+			errorsHandler.upstreamErrorHandler(res, next, 513)(errorToPassThrough);
 		});
 		app.use(errorsHandler.middleware);
 	});
@@ -63,7 +63,7 @@ describe('express errors handler in prod', function () {
 			.end((err, res) => {
 				expect(res.status).to.equal(500);
 				expect(logger.error.callCount).to.equal(1);
-				expect(logger.error.calledWith(error, { event: 'uncaughterror'})).to.be.true;
+				expect(logger.error.calledWith(errorToPassThrough, { event: 'uncaughterror'})).to.be.true;
 				expect(ravenSpy.called).to.be.true;
 				expect(ravenSpy.args[0].length).to.equal(4);
 				done();
@@ -99,7 +99,7 @@ describe('express errors handler in prod', function () {
 				expect(res.status).to.equal(500);
 				expect(ravenSpy.called).to.be.true;
 				expect(ravenSpy.args[0].length).to.equal(4);
-				expect(logger.error.calledWith(error, { event: 'uncaughterror'})).to.be.true;
+				expect(logger.error.calledWith(errorToPassThrough, { event: 'uncaughterror'})).to.be.true;
 				done();
 			});
 	});
@@ -121,4 +121,152 @@ describe('express errors handler in prod', function () {
 		expect(captureMessageSpy.args[0].length).to.equal(1);
 		expect(captureMessageSpy.args[0][0]).to.equal('random message');
 	});
+
+	describe('it does not affect strings with no email addresses in them and ', () => {
+		it('works with a blank error msg', function (done) {
+			const blankErr = ' '
+
+			errorToPassThrough.message = ' ';
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(blankErr);
+					done();
+				});
+		});
+
+		it('works with a string with an already clean message in it', function (done) {
+			const cleanErrorMsg = 'A clean error message'
+
+			errorToPassThrough.message = cleanErrorMsg;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(cleanErrorMsg);
+					done();
+				});
+		});
+	})
+
+	describe('it works at removing email addresses from errors when there is ', () => {
+		it('a single email address part way through the message', (done) => {
+			const errorWithSingleEmailAdd = 'An error with a single email address daffy@duck.co.uk part way through it'
+			const errorWithSingleEmailAddRemoved = 'An error with a single email address -redacted- part way through it'
+
+			errorToPassThrough.message = errorWithSingleEmailAdd;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(errorWithSingleEmailAddRemoved);
+					done();
+				});
+		});
+
+		it('a single email address part way through the message', (done) => {
+			const errorWithSingleEmailAdd = 'An error with a single email address daffy@duck.co.uk'
+			const errorWithSingleEmailAddRemoved = 'An error with a single email address -redacted-'
+
+			errorToPassThrough.message = errorWithSingleEmailAdd;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(errorWithSingleEmailAddRemoved);
+					done();
+				});
+		});
+
+
+		it('a single email address part way through the message', (done) => {
+			const errorWithSingleEmailAdd = 'daffy@duck.co.uk An error with a single email address'
+			const errorWithSingleEmailAddRemoved = '-redacted- An error with a single email address'
+
+			errorToPassThrough.message = errorWithSingleEmailAdd;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(errorWithSingleEmailAddRemoved);
+					done();
+				});
+		});
+
+		it('multiple email addresses in the message', (done) => {
+			const errorWithMultipleEmailAdd = 'An error with multiple email daffyduck@test.com addresses donald.duck@other.co.uk and text after'
+			const errorWithMultipleEmailAddRemoved = 'An error with multiple email -redacted- addresses -redacted- and text after'
+
+			errorToPassThrough.message = errorWithMultipleEmailAdd;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(errorWithMultipleEmailAddRemoved);
+					done();
+				});
+		})
+
+		it('a single email address in a url with addition params', (done) => {
+			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@mickey.com&other=xyz'
+			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted-&other=xyz'
+
+			errorToPassThrough.message = errorWithUrlEmail;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(errorWithUrlEmailRemoved);
+					done();
+				});
+		});
+
+		it('a single email address in a url with additional text after it', (done) => {
+			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@mickey.com etc etc'
+			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted- etc etc'
+
+			errorToPassThrough.message = errorWithUrlEmail;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(errorWithUrlEmailRemoved);
+					done();
+				});
+		});
+
+		it('a single email address in a url with addition params and text', (done) => {
+			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@mickey.com&other=xyz etc etc'
+			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted-&other=xyz etc etc'
+
+			errorToPassThrough.message = errorWithUrlEmail;
+
+			request(app)
+				.get('/caught-error')
+				.end((err, res) => {
+					expect(res.status).to.equal(500);
+					expect(ravenSpy.called).to.be.true;
+					expect(ravenSpy.args[0][0]).to.equal(errorWithUrlEmailRemoved);
+					done();
+				});
+		});
+	})
+
 });
