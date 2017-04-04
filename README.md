@@ -1,11 +1,11 @@
-# express-errors-handler [![Circle CI](https://circleci.com/gh/Financial-Times/express-errors-handler.svg?style=svg)](https://circleci.com/gh/Financial-Times/express-errors-handler)
+# n-raven [![Circle CI](https://circleci.com/gh/Financial-Times/n-raven.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-raven)
 
 Some middleware for Express and Node that sets up Raven (or not as appropriate) depending on sensible environment variables.
 
 ## Installation
 
 ```sh
-npm install --save express-errors-handler
+npm install --save n-raven
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ npm install --save express-errors-handler
 ```js
 var express = require('express');
 var app = express();
-var eeh = require('express-errors-handler')
+var eeh = require('@financial-times/n-raven')
 var errorMiddleware = eeh.middleware;
 
 var promiseEnabledApi = require('./my-promise-enabled-api');
