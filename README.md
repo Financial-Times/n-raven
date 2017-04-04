@@ -1,4 +1,4 @@
-# n-raven [![Circle CI](https://circleci.com/gh/Financial-Times/n-raven.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-raven)
+# Next Raven [![Circle CI](https://circleci.com/gh/Financial-Times/n-raven.svg?style=svg)](https://circleci.com/gh/Financial-Times/n-raven)
 
 Some middleware for Express and Node that sets up Raven (or not as appropriate) depending on sensible environment variables.
 
