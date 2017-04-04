@@ -4,7 +4,7 @@
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Financial-Times/express-errors-handler.git"
+    "url": "git://github.com/Financial-Times/n-raven.git"
   },
   "license": "MIT",
   "dependencies": {
