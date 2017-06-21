@@ -133,7 +133,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(blankErr);
+					expect(ravenSpy.args[0][0].message).to.equal(blankErr);
 					done();
 				});
 		});
@@ -148,7 +148,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(cleanErrorMsg);
+					expect(ravenSpy.args[0][0].message).to.equal(cleanErrorMsg);
 					done();
 				});
 		});
@@ -166,7 +166,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(errorWithSingleEmailAddRemoved);
+					expect(ravenSpy.args[0][0].message).to.equal(errorWithSingleEmailAddRemoved);
 					done();
 				});
 		});
@@ -182,7 +182,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(errorWithSingleEmailAddRemoved);
+					expect(ravenSpy.args[0][0].message).to.equal(errorWithSingleEmailAddRemoved);
 					done();
 				});
 		});
@@ -199,7 +199,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(errorWithSingleEmailAddRemoved);
+					expect(ravenSpy.args[0][0].message).to.equal(errorWithSingleEmailAddRemoved);
 					done();
 				});
 		});
@@ -215,7 +215,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(errorWithMultipleEmailAddRemoved);
+					expect(ravenSpy.args[0][0].message).to.equal(errorWithMultipleEmailAddRemoved);
 					done();
 				});
 		})
@@ -231,7 +231,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(errorWithUrlEmailRemoved);
+					expect(ravenSpy.args[0][0].message).to.equal(errorWithUrlEmailRemoved);
 					done();
 				});
 		});
@@ -247,7 +247,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(errorWithUrlEmailRemoved);
+					expect(ravenSpy.args[0][0].message).to.equal(errorWithUrlEmailRemoved);
 					done();
 				});
 		});
@@ -263,7 +263,7 @@ describe('express errors handler in prod', function () {
 				.end((err, res) => {
 					expect(res.status).to.equal(500);
 					expect(ravenSpy.called).to.be.true;
-					expect(ravenSpy.args[0][0]).to.equal(errorWithUrlEmailRemoved);
+					expect(ravenSpy.args[0][0].message).to.equal(errorWithUrlEmailRemoved);
 					done();
 				});
 		});

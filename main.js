@@ -97,11 +97,11 @@ function sanitiseError (err) {
 		if (cleanedErr) {
 			cleanedErr = cleanedErr.replace(emailRegex, '-redacted-')
 		}
-		return cleanedErr
+
+		err.message = cleanedErr;
 	}
-	else {
-		return err
-	}
+
+	return err;
 }
 
 if (process.env.NODE_ENV === 'production') {
