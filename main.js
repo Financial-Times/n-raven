@@ -15,7 +15,7 @@ function sendErrorDev (err, req, res, next) {
 			message: err.message
 		};
 		if (err.stack) {
-			error.stack = err.stack.split('\n')
+			error.stack = err.stack.split('\n');
 		}
 	} else {
 		error = err;
@@ -36,7 +36,7 @@ function sendErrorProd (err, req, res, next) {
 	} else {
 		logger.error(err, { event: 'uncaughterror' });
 		if (req && res && next) {
-			err = sanitiseError(err)
+			err = sanitiseError(err);
 			return ravenMiddleware(err, req, res, next);
 		}
 	}
@@ -69,24 +69,24 @@ function getCaptureError (client, _captureError) {
 function sanitiseError (err) {
 	//Initially check for a specific email field e.g. in a url in an attempt to not blitz helpful error information if possible
 	if (err.message) {
-		const origErrorMsg = err.message
-		const emailFieldRegex = 'email='
-		const indxEmailField = origErrorMsg.search(emailFieldRegex)
+		const origErrorMsg = err.message;
+		const emailFieldRegex = 'email=';
+		const indxEmailField = origErrorMsg.search(emailFieldRegex);
 
-		let cleanedErr = origErrorMsg
+		let cleanedErr = origErrorMsg;
 		if (indxEmailField > 0) {
 
-			cleanedErr = origErrorMsg.slice(0,indxEmailField) + 'email=-redacted-'
+			cleanedErr = origErrorMsg.slice(0,indxEmailField) + 'email=-redacted-';
 
 			//in case there are more fields / is further at the end of the string
-			let indexOfAdditionalParams = origErrorMsg.indexOf('&', indxEmailField)
-			let indexOfPostURLspace = origErrorMsg.indexOf(' ', indxEmailField)
+			let indexOfAdditionalParams = origErrorMsg.indexOf('&', indxEmailField);
+			let indexOfPostURLspace = origErrorMsg.indexOf(' ', indxEmailField);
 
 			if(indexOfAdditionalParams > 0) {
-				cleanedErr = cleanedErr + origErrorMsg.slice(indexOfAdditionalParams, err.length)
+				cleanedErr = cleanedErr + origErrorMsg.slice(indexOfAdditionalParams, err.length);
 			}
 			else if (indexOfPostURLspace > 0){
-				cleanedErr = cleanedErr + origErrorMsg.slice(indexOfPostURLspace, err.length)
+				cleanedErr = cleanedErr + origErrorMsg.slice(indexOfPostURLspace, err.length);
 			}
 
 		}
@@ -95,7 +95,7 @@ function sanitiseError (err) {
 		const emailRegex = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
 
 		if (cleanedErr) {
-			cleanedErr = cleanedErr.replace(emailRegex, '-redacted-')
+			cleanedErr = cleanedErr.replace(emailRegex, '-redacted-');
 		}
 
 		err.message = cleanedErr;

@@ -124,7 +124,7 @@ describe('express errors handler in prod', function () {
 
 	describe('it does not affect strings with no email addresses in them and ', () => {
 		it('works with a blank error msg', function (done) {
-			const blankErr = ' '
+			const blankErr = ' ';
 
 			errorToPassThrough.message = ' ';
 
@@ -139,7 +139,7 @@ describe('express errors handler in prod', function () {
 		});
 
 		it('works with a string with an already clean message in it', function (done) {
-			const cleanErrorMsg = 'A clean error message'
+			const cleanErrorMsg = 'A clean error message';
 
 			errorToPassThrough.message = cleanErrorMsg;
 
@@ -152,12 +152,12 @@ describe('express errors handler in prod', function () {
 					done();
 				});
 		});
-	})
+	});
 
 	describe('it works at removing email addresses from errors when there is ', () => {
 		it('a single email address part way through the message', (done) => {
-			const errorWithSingleEmailAdd = 'An error with a single email address daffy@duck.co.uk part way through it'
-			const errorWithSingleEmailAddRemoved = 'An error with a single email address -redacted- part way through it'
+			const errorWithSingleEmailAdd = 'An error with a single email address daffy.duck@ft.com part way through it';
+			const errorWithSingleEmailAddRemoved = 'An error with a single email address -redacted- part way through it';
 
 			errorToPassThrough.message = errorWithSingleEmailAdd;
 
@@ -172,8 +172,8 @@ describe('express errors handler in prod', function () {
 		});
 
 		it('a single email address part way through the message', (done) => {
-			const errorWithSingleEmailAdd = 'An error with a single email address daffy@duck.co.uk'
-			const errorWithSingleEmailAddRemoved = 'An error with a single email address -redacted-'
+			const errorWithSingleEmailAdd = 'An error with a single email address daffy@ft.com';
+			const errorWithSingleEmailAddRemoved = 'An error with a single email address -redacted-';
 
 			errorToPassThrough.message = errorWithSingleEmailAdd;
 
@@ -189,8 +189,8 @@ describe('express errors handler in prod', function () {
 
 
 		it('a single email address part way through the message', (done) => {
-			const errorWithSingleEmailAdd = 'daffy@duck.co.uk An error with a single email address'
-			const errorWithSingleEmailAddRemoved = '-redacted- An error with a single email address'
+			const errorWithSingleEmailAdd = 'daffy.duck@ft.com An error with a single email address';
+			const errorWithSingleEmailAddRemoved = '-redacted- An error with a single email address';
 
 			errorToPassThrough.message = errorWithSingleEmailAdd;
 
@@ -205,8 +205,8 @@ describe('express errors handler in prod', function () {
 		});
 
 		it('multiple email addresses in the message', (done) => {
-			const errorWithMultipleEmailAdd = 'An error with multiple email daffyduck@test.com addresses donald.duck@other.co.uk and text after'
-			const errorWithMultipleEmailAddRemoved = 'An error with multiple email -redacted- addresses -redacted- and text after'
+			const errorWithMultipleEmailAdd = 'An error with multiple email daffy.duck@ft.com addresses daffy.duck.2@ft.com and text after';
+			const errorWithMultipleEmailAddRemoved = 'An error with multiple email -redacted- addresses -redacted- and text after';
 
 			errorToPassThrough.message = errorWithMultipleEmailAdd;
 
@@ -218,11 +218,11 @@ describe('express errors handler in prod', function () {
 					expect(ravenSpy.args[0][0].message).to.equal(errorWithMultipleEmailAddRemoved);
 					done();
 				});
-		})
+		});
 
 		it('a single email address in a url with addition params', (done) => {
-			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@mickey.com&other=xyz'
-			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted-&other=xyz'
+			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@ft.com&other=xyz';
+			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted-&other=xyz';
 
 			errorToPassThrough.message = errorWithUrlEmail;
 
@@ -237,8 +237,8 @@ describe('express errors handler in prod', function () {
 		});
 
 		it('a single email address in a url with additional text after it', (done) => {
-			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@mickey.com etc etc'
-			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted- etc etc'
+			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@ft.com etc etc';
+			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted- etc etc';
 
 			errorToPassThrough.message = errorWithUrlEmail;
 
@@ -253,8 +253,8 @@ describe('express errors handler in prod', function () {
 		});
 
 		it('a single email address in a url with addition params and text', (done) => {
-			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@mickey.com&other=xyz etc etc'
-			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted-&other=xyz etc etc'
+			const errorWithUrlEmail = 'An error with a url containing an email address like this http://some-api.ft.com?email=daffy.duck@ft.com&other=xyz etc etc';
+			const errorWithUrlEmailRemoved = 'An error with a url containing an email address like this http://some-api.ft.com?email=-redacted-&other=xyz etc etc';
 
 			errorToPassThrough.message = errorWithUrlEmail;
 
@@ -267,6 +267,6 @@ describe('express errors handler in prod', function () {
 					done();
 				});
 		});
-	})
+	});
 
 });
