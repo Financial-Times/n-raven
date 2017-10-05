@@ -9,8 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "@financial-times/n-logger": "^5.0.2",
-    "fetchres": "^1.5.1",
-    "raven": "^0.12.0"
+    "raven": "^2.0.0"
   },
   "devDependencies": {
     "@financial-times/n-gage": "^1.8.21",
