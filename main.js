@@ -66,7 +66,18 @@ if (process.env.NODE_ENV === 'production') {
 		.install(() => process.exit(1));
 
 	module.exports = raven;
-	module.exports.middleware = sendErrorProd;
+
+	const _errorHandler = raven.errorHandler;
+	module.exports.errorHandler = () => {
+		const middleware = _errorHandler();
+		return (err, req, res, next) => {
+			logger.error(err, { event: 'uncaughterror' });
+			if (req && res && next) {
+				err = sanitiseError(err);
+				return middleware(err, req, res, next);
+			}
+		};
+	};
 
 } else {
 
