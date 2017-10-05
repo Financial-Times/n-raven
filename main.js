@@ -67,8 +67,8 @@ if (process.env.NODE_ENV === 'production') {
 
 	module.exports = raven;
 
-	const _errorHandler = raven.errorHandler;
-	module.exports.errorHandler = () => {
+	const _errorHandler = raven.errorHandler.bind(raven);
+	module.exports.errorHandler = function () {
 		const middleware = _errorHandler();
 		return (err, req, res, next) => {
 			logger.error(err, { event: 'uncaughterror' });
