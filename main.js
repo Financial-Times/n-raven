@@ -88,6 +88,7 @@ if (process.env.NODE_ENV === 'production') {
 		context: func => func(),
 		captureMessage: logger.warn.bind(logger),
 		captureError: logger.error.bind(logger),
+		captureException: logger.error.bind(logger),
 		requestHandler: () => (req, res, next) => next(),
 		errorHandler: () => (err, req, res, next) => {
 			let error;
