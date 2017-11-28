@@ -65,6 +65,9 @@ if (process.env.NODE_ENV === 'production') {
 		// https://docs.sentry.io/clients/node/usage/#global-fatal-error-handler
 		.install(() => process.exit(1));
 
+	// Support for the legacy captureError function.
+	raven.captureError = raven.captureException;
+
 	module.exports = raven;
 
 	const _errorHandler = raven.errorHandler.bind(raven);
