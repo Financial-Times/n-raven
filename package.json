@@ -8,7 +8,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@financial-times/n-logger": "^5.0.2",
+    "@financial-times/n-logger": "^5.5.7",
     "raven": "^2.0.0"
   },
   "devDependencies": {
