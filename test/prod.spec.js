@@ -17,10 +17,10 @@ describe('express errors handler in prod', function () {
 	const captureMessageSpy = sinon.spy();
 
 	before(function () {
-		sinon.stub(raven, 'errorHandler', () => ravenSpy);
+		sinon.stub(raven, 'errorHandler').callsFake(() => ravenSpy);
 
-		sinon.stub(raven, 'captureMessage', captureMessageSpy);
-		sinon.stub(raven, 'install', sinon.spy());
+		sinon.stub(raven, 'captureMessage').callsFake(captureMessageSpy);
+		sinon.stub(raven, 'install').callsFake(sinon.spy());
 
 		// sinon.stub(raven, 'Client', clientStub);
 		nRaven = require('../main');
