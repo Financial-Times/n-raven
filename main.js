@@ -66,7 +66,7 @@ if (process.env.NODE_ENV === 'production') {
 		.install(() => process.exit(1));
 
 	// Support for the legacy captureError function.
-	raven.captureError = raven.captureException;
+	raven.captureError = raven.captureException.bind(raven);
 
 	module.exports = raven;
 
