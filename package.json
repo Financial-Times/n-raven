@@ -17,11 +17,13 @@
     "express": "^4.16.2",
     "mocha": "^4.1.0",
     "sinon": "^4.1.3",
+    "snyk": "^1.168.0",
     "supertest": "^3.0.0"
   },
   "scripts": {
     "precommit": "node_modules/.bin/secret-squirrel",
     "commitmsg": "node_modules/.bin/secret-squirrel-commitmsg",
-    "prepush": "make verify -j3"
+    "prepush": "make verify -j3",
+    "prepare": "npx snyk protect || npx snyk protect -d || true"
   }
 }
