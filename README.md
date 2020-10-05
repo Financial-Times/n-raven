@@ -5,7 +5,7 @@ Some middleware for Express and Node that sets up Raven (or not as appropriate) 
 ## Installation
 
 ```sh
-npm install --save n-raven
+npm install --save @financial-times/n-raven
 ```
 
 ## Usage
