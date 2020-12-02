@@ -12,7 +12,7 @@
     "raven": "^2.3.0"
   },
   "devDependencies": {
-    "@financial-times/n-gage": "^3.6.0",
+    "@financial-times/n-gage": "^8.0.0",
     "chai": "^4.1.2",
     "express": "^4.16.2",
     "mocha": "^4.1.0",
