@@ -2,6 +2,8 @@
 
 Some middleware for Express and Node that sets up Raven (or not as appropriate) depending on sensible environment variables.
 
+**This wrapper is FT.com-specific; apps maintained by teams outside of Customer Products should [use `@sentry/node` directly](https://docs.sentry.io/platforms/node/guides/express/).**
+
 ## Installation
 
 ```sh
