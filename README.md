@@ -2,6 +2,8 @@
 
 Some middleware for Express and Node that sets up Raven (or not as appropriate) depending on sensible environment variables.
 
+**This wrapper is FT.com-specific; apps maintained by teams outside of Customer Products should [use `@sentry/node` directly](https://docs.sentry.io/platforms/node/guides/express/).**
+
 ## Installation
 
 ```sh
@@ -11,42 +13,30 @@ npm install --save @financial-times/n-raven
 ## Usage
 
 ```js
-var express = require('express');
-var app = express();
-var eeh = require('@financial-times/n-raven')
-var errorMiddleware = eeh.middleware;
+const express = require('express');
+const app = express();
+const nRaven = require('@financial-times/n-raven')
 
-var promiseEnabledApi = require('./my-promise-enabled-api');
+const promiseEnabledApi = require('./my-promise-enabled-api');
+
+// must come before all routes
+app.use(nRaven.requestHandler);
 
 // A typical route using Promises
-app.get('/a-typical-route', function(req, res, next) {
-	promiseEnabledApi.getSomeThings()
-		.then(function(someThings) {
-			res.render(someThings);
-		})
+app.get('/a-typical-route', async function(req, res, next) {
+	try {
+		const someThings = await promiseEnabledApi.getSomeThings()
 
-		// Make sure to end all Promise chains with a `catch`
+		res.render(someThings);
+	} catch(error) {
+		// Make sure to end all async functions with a `catch`
 		// that passes the error to the next middleware
-		.catch(next);
+		next(error);
+	}
 });
 
-// A typical route with an upstream dependency
-app.get('/a-typical-route', function(req, res, next) {
-	fetch('http://a.url.i-like')
-		.then(function(someThings) {
-			res.render(someThings);
-		})
-		// chosse what status to send when an upstream service errors
-		.catch(eeh.upstreamErrorHandler(404))
-
-		// Make sure to end all Promise chains with a `catch`
-		// that passes the error to the next middleware
-		.catch(next);
-});
-
-
-// Make sure the middleware is added after your routes otherwise you'll lose the errors
-app.use(errorMiddleware);
+// must come after every route
+app.use(nRaven.errorHandler);
 ```
 
 ## Supported environment variables
