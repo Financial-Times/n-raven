@@ -17,6 +17,10 @@ describe('express errors handler in dev', function () {
 		app.get('/caught-error', function (req, res, next) {
 			next(error);
 		});
+		app.get('/suppressed-error', function (req, res, next) {
+			res.locals.suppressRavenLogger = true;
+			next(error);
+		});
 
 		app.use(nRaven.errorHandler());
 	});
@@ -37,6 +41,14 @@ describe('express errors handler in dev', function () {
 				expect(body.error).to.contain.keys('stack');
 				expect(body.error.stack[0]).to.equal('Error: potato');
 				expect(logger.error.calledWith(error, { event: 'uncaughterror' })).to.be.true;
+			});
+	});
+
+	it('does not log when errors are suppressed', () => {
+		return request(app)
+			.get('/suppressed-error')
+			.expect(() => {
+				expect(logger.error.notCalled).to.be.true;
 			});
 	});
 });
