@@ -39,6 +39,10 @@ app.get('/a-typical-route', async function(req, res, next) {
 app.use(nRaven.errorHandler);
 ```
 
+### Suppressing error logging
+
+By default the raven error handler logs error details as well as sending error information to Sentry. You can suppress this behaviour by setting `response.locals.suppressRavenLogger` to `true` in any route before raven's error handler is registered.
+
 ## Supported environment variables
 - `NODE_ENV` - mode to operate in, can be either `PRODUCTION` (sends bugs to aggregator) or any another value (shows bugs to user)
 - `RAVEN_URL` - URL to report bugs captured in production

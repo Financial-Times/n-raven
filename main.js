@@ -74,7 +74,9 @@ if (process.env.NODE_ENV === 'production') {
 	module.exports.errorHandler = function () {
 		const middleware = _errorHandler();
 		return (err, req, res, next) => {
-			logger.error(err, { event: 'uncaughterror' });
+			if (!res.locals.suppressRavenLogger) {
+				logger.error(err, { event: 'uncaughterror' });
+			}
 			if (req && res && next) {
 				err = sanitiseError(err);
 				return middleware(err, req, res, next);
@@ -103,7 +105,9 @@ if (process.env.NODE_ENV === 'production') {
 			} else {
 				error = err;
 			}
-			logger.error(err, { event: 'uncaughterror' });
+			if (!res.locals.suppressRavenLogger) {
+				logger.error(err, { event: 'uncaughterror' });
+			}
 			res && res.status(500).send({ type: 'Uncaught Error', error: error });
 		}
 	};

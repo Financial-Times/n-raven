@@ -29,6 +29,10 @@ describe('express errors handler in prod', function () {
 		app.get('/caught-error', function (req, res, next) {
 			next(errorToPassThrough);
 		});
+		app.get('/suppressed-error', function (req, res, next) {
+			res.locals.suppressRavenLogger = true;
+			next(errorToPassThrough);
+		});
 
 		app.use(nRaven.errorHandler());
 	});
@@ -206,6 +210,14 @@ describe('express errors handler in prod', function () {
 					done();
 				});
 		});
+	});
+
+	it('does not log when errors are suppressed', () => {
+		return request(app)
+			.get('/suppressed-error')
+			.expect(() => {
+				expect(logger.error.notCalled).to.be.true;
+			});
 	});
 
 });
