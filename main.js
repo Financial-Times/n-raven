@@ -2,6 +2,7 @@
 'use strict';
 
 const logger = require('@financial-times/n-logger').default;
+const { logUnhandledError } = require('@dotcom-reliability-kit/log-error');
 const raven = require('raven');
 const path = require('path');
 
@@ -63,7 +64,10 @@ if (process.env.NODE_ENV === 'production') {
 		})
 		// Die on uncaughtException
 		// https://docs.sentry.io/clients/node/usage/#global-fatal-error-handler
-		.install(() => process.exit(1));
+		.install(error => {
+			logUnhandledError({ error });
+			process.exit(1);
+		});
 
 	// Support for the legacy captureError function.
 	raven.captureError = raven.captureException.bind(raven);
